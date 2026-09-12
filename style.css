@@ -1,0 +1,404 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar { display: none; }
+
+:root {
+  --bg-dark: #050a06;
+  --neon-green: #00ff41;
+  --neon-green-dim: rgba(0, 255, 65, 0.4);
+  --neon-green-glow: rgba(0, 255, 65, 0.1);
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background: radial-gradient(circle at 50% 50%, #0a1a0d 0%, #020502 100%);
+  color: var(--neon-green);
+  font-family: var(--font-mono);
+  display: flex;
+  flex-direction: column;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Header ─────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--neon-green-dim);
+}
+
+.header-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.clear-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--neon-green);
+  background: none;
+  border: 1px solid var(--neon-green);
+  padding: 4px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+.clear-btn:hover {
+  background: var(--neon-green-dim);
+}
+.clear-btn.hidden {
+  display: none !important;
+}
+
+/* ── Rankings bar ───────────────────────────── */
+.rankings-bar {
+  background: transparent;
+  border-bottom: 1px solid var(--neon-green-dim);
+  overflow-x: auto;
+}
+
+.rankings-inner {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  width: max-content;
+  margin: 0 auto;
+}
+
+.hand-pill {
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px dashed var(--neon-green-dim);
+  background: transparent;
+  color: var(--neon-green);
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.hand-pill.best {
+  background: var(--neon-green-glow);
+  color: var(--neon-green);
+  font-weight: 700;
+  border-color: var(--neon-green);
+  border-style: solid;
+  opacity: 1;
+  box-shadow: 0 0 10px var(--neon-green-glow);
+}
+
+.hand-pill.worse {
+  opacity: 0.4;
+}
+
+/* ── Felt main area ─────────────────────────── */
+.felt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px 24px;
+}
+
+/* ── Best hand callout ──────────────────────── */
+.best-hand-callout {
+  font-size: 14px;
+  color: var(--neon-green);
+  opacity: 0.8;
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
+.best-hand-callout.active {
+  opacity: 1;
+  font-weight: 700;
+  text-shadow: 0 0 10px var(--neon-green-glow);
+}
+
+/* ── Card sections ──────────────────────────── */
+.card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.section-label {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+}
+
+.section-sublabel {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.card-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ── Playing card ───────────────────────────── */
+.card {
+  background: transparent;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+.card:hover { transform: scale(1.05); }
+
+.card-remove-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+.card:hover .card-remove-overlay {
+  background: rgba(0, 255, 65, 0.2);
+  color: var(--neon-green);
+}
+
+/* ── Empty slot ─────────────────────────────── */
+.slot {
+  border-radius: 8px;
+  border: 2px dashed var(--neon-green-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--neon-green-dim);
+  font-size: 20px;
+  background: transparent;
+}
+
+.slot:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  background: var(--neon-green-glow);
+}
+
+.slot.active {
+  border-color: var(--neon-green);
+  background: var(--neon-green-glow);
+  color: var(--neon-green);
+  box-shadow: 0 0 15px var(--neon-green-glow);
+}
+
+/* ── Divider ────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--neon-green-dim));
+}
+.divider:last-child .divider-line {
+  background: linear-gradient(to left, transparent, var(--neon-green-dim));
+}
+
+.divider-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}
+
+/* ── Remove hint ────────────────────────────── */
+.remove-hint {
+  font-size: 10px;
+  opacity: 0.5;
+}
+.remove-hint.hidden {
+  display: none !important;
+}
+
+/* ── Modal ──────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+.modal-backdrop.hidden {
+  display: none !important;
+}
+
+.modal {
+  background: var(--bg-dark);
+  border: 1px solid var(--neon-green);
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--neon-green-dim);
+  padding-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--neon-green);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.suit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.suit-symbol {
+  width: 24px;
+  text-align: center;
+  font-size: 20px;
+  color: var(--neon-green) !important;
+}
+
+.rank-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rank-btn {
+  width: 36px;
+  height: 48px;
+  border-radius: 4px;
+  border: 1px solid var(--neon-green-dim);
+  background: transparent;
+  color: var(--neon-green) !important;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.rank-btn:hover {
+  background: var(--neon-green-glow);
+  border-color: var(--neon-green);
+}
+
+.rank-btn.taken {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Mobile Responsiveness ──────────────────── */
+@media (max-width: 480px) {
+  .header { 
+    padding: 12px 16px; 
+  }
+  .header-title { 
+    font-size: 12px; 
+  }
+  
+  .felt {
+    padding: 24px 16px;
+    gap: 28px;
+  }
+
+  /* Force 5 community cards to shrink and stay on 1 row */
+  #community-row {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  #community-row .card, 
+  #community-row .slot {
+    width: 0 !important; /* overrides JS inline width */
+    flex: 1 1 0;
+    height: auto !important; /* overrides JS inline height */
+    aspect-ratio: 64 / 90;
+    min-width: 0;
+  }
+
+  /* Keep Hole cards visible but a bit smaller */
+  #hole-row .card, 
+  #hole-row .slot {
+    width: 76px !important;
+    height: auto !important;
+    aspect-ratio: 88 / 124;
+  }
+
+  .divider {
+    max-width: 100%;
+  }
+
+  /* Mobile bottom-sheet menu */
+  .modal-backdrop {
+    align-items: flex-end; 
+  }
+
+  .modal {
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    padding: 20px 16px 32px; /* Extra bottom padding for mobile screens */
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .suit-row {
+    gap: 12px;
+  }
+  .rank-grid {
+    gap: 6px;
+  }
+  .rank-btn {
+    width: 32px;
+    height: 42px;
+    font-size: 11px;
+  }
+}
