@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Poker Hand Analyzer</title>
+  <title>Poker Hand Assistant</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -12,7 +12,7 @@
 
   <!-- Header -->
   <header class="header">
-    <span class="header-title">Poker Hand Analyzer</span>
+    <span class="header-title">Poker Hand Assistant</span>
     <button id="clear-btn" class="clear-btn hidden">Clear All</button>
   </header>
 
