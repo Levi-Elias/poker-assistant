@@ -40,6 +40,19 @@ body {
   font-weight: 600;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
 .clear-btn {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -59,44 +72,101 @@ body {
   display: none !important;
 }
 
-/* ── Rankings bar ───────────────────────────── */
+/* ── Rankings bar (visual hand strip) ──────── */
 .rankings-bar {
-  background: transparent;
+  background: rgba(0, 10, 2, 0.6);
   border-bottom: 1px solid var(--neon-green-dim);
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .rankings-inner {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   padding: 16px 24px;
   width: max-content;
-  margin: 0 auto;
 }
 
-.hand-pill {
-  font-size: 12px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  border: 1px dashed var(--neon-green-dim);
-  background: transparent;
-  color: var(--neon-green);
+/* ── Hand display block ─────────────────────── */
+.hand-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 65, 0.25);
+  background: rgba(0, 255, 65, 0.03);
   transition: all 0.3s ease;
-  opacity: 0.7;
+  cursor: default;
+  flex-shrink: 0;
 }
 
-.hand-pill.best {
-  background: var(--neon-green-glow);
-  color: var(--neon-green);
-  font-weight: 700;
+.hand-display.best {
   border-color: var(--neon-green);
-  border-style: solid;
-  opacity: 1;
-  box-shadow: 0 0 10px var(--neon-green-glow);
+  border-width: 2px;
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2), inset 0 0 20px rgba(0, 255, 65, 0.05);
 }
 
-.hand-pill.worse {
-  opacity: 0.4;
+.hand-display.worse {
+  opacity: 0.3;
+  border-color: rgba(0, 255, 65, 0.1);
+  background: transparent;
+}
+
+.hand-display.impossible {
+  opacity: 0.15;
+  border-color: rgba(0, 255, 65, 0.08);
+  background: transparent;
+}
+
+.hand-display-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--neon-green);
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.hand-display.best .hand-display-label {
+  font-weight: 700;
+  opacity: 1;
+  font-size: 11px;
+}
+
+/* ── Mini cards ──────────────────────────────── */
+.hand-display-cards {
+  display: flex;
+  gap: 4px;
+}
+
+.mini-card {
+  width: 40px;
+  height: 56px;
+  border-radius: 4px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.mini-card.owned {
+  opacity: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.mini-card.missing {
+  opacity: 0.2;
+  filter: grayscale(1) brightness(0.7);
+}
+
+.mini-card.impossible-card {
+  background-color: rgba(0, 255, 65, 0.04);
+  border: 1px dashed rgba(0, 255, 65, 0.15);
+  border-radius: 4px;
 }
 
 /* ── Felt main area ─────────────────────────── */
@@ -339,17 +409,59 @@ body {
 
 /* ── Mobile Responsiveness ──────────────────── */
 @media (max-width: 480px) {
+  body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  
   .header { 
-    padding: 12px 16px; 
+    padding: 8px 16px; 
   }
   .header-title { 
     font-size: 12px; 
   }
-  
-  .felt {
-    padding: 24px 16px;
-    gap: 28px;
+  .header-logo {
+    height: 32px;
   }
+  
+  /* On mobile: keep rankings as horizontal scroll strip (don't wrap) */
+  .rankings-bar {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .rankings-inner {
+    width: max-content;
+    flex-wrap: nowrap;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  /* Smaller hand display blocks on mobile */
+  .hand-display {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .hand-display-label {
+    font-size: 9px;
+  }
+  .mini-card {
+    width: 30px;
+    height: 42px;
+    border-radius: 3px;
+  }
+
+  .felt {
+    padding: 10px 16px 20px;
+    gap: 8px;
+    justify-content: space-evenly;
+  }
+
+  .card-section {
+    gap: 8px;
+  }
+  
+  .section-label { font-size: 10px; }
+  .section-sublabel { font-size: 8px; }
+  .best-hand-callout { font-size: 11px; }
 
   /* Force 5 community cards to shrink and stay on 1 row */
   #community-row {
@@ -358,23 +470,24 @@ body {
   }
   #community-row .card, 
   #community-row .slot {
-    width: 0 !important; /* overrides JS inline width */
+    width: 0 !important;
     flex: 1 1 0;
-    height: auto !important; /* overrides JS inline height */
+    height: auto !important;
     aspect-ratio: 64 / 90;
     min-width: 0;
   }
 
-  /* Keep Hole cards visible but a bit smaller */
+  /* Keep Hole cards very compact */
   #hole-row .card, 
   #hole-row .slot {
-    width: 76px !important;
+    width: 60px !important;
     height: auto !important;
     aspect-ratio: 88 / 124;
   }
 
   .divider {
     max-width: 100%;
+    margin: 4px 0;
   }
 
   /* Mobile bottom-sheet menu */
@@ -385,20 +498,24 @@ body {
   .modal {
     border-radius: 16px 16px 0 0;
     border-bottom: none;
-    padding: 20px 16px 32px; /* Extra bottom padding for mobile screens */
+    padding: 16px 12px 24px;
     max-height: 85vh;
     overflow-y: auto;
   }
 
   .suit-row {
-    gap: 12px;
+    gap: 10px;
   }
   .rank-grid {
-    gap: 6px;
+    gap: 4px;
   }
   .rank-btn {
-    width: 32px;
-    height: 42px;
-    font-size: 11px;
+    width: 30px;
+    height: 40px;
+    font-size: 10px;
+  }
+  .suit-symbol {
+    font-size: 16px;
+    width: 20px;
   }
 }
